@@ -21,7 +21,7 @@ width:70%;
 padding:20px;
 border:2px solid white;
 border-radius:40px;
-font-size:22px;
+font-size:26px;
 }
 
 .answers{
@@ -40,13 +40,8 @@ background:orange;
 cursor:pointer;
 }
 
-.correct{
-background:green;
-}
-
-.wrong{
-background:red;
-}
+.correct{background:green;}
+.wrong{background:red;}
 
 </style>
 
@@ -56,7 +51,7 @@ background:red;
 
 <h1>Millionaire</h1>
 
-<div class="question" id="question"></div>
+<div class="question" id="question">Pentru ce?</div>
 
 <div class="answers">
 
@@ -83,8 +78,6 @@ let {data}=await supabase
 .select("*")
 .eq("id",1)
 .single()
-
-document.getElementById("question").innerText=data.question
 
 document.getElementById("A").innerText="A: "+data.A
 document.getElementById("B").innerText="B: "+data.B
