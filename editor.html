@@ -3,66 +3,38 @@
 <head>
 
 <meta charset="UTF-8">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-<style>
-
-body{
-background:#1a0033;
-color:white;
-font-family:Arial;
-text-align:center;
-}
-
-input{
-padding:10px;
-margin:5px;
-}
-
-button{
-background:orange;
-border:none;
-padding:10px 20px;
-margin:10px;
-font-size:18px;
-}
-
-</style>
 
 </head>
 
-<body>
+<body style="background:#1a0033;color:white;text-align:center;font-family:Arial;">
 
-<h2>EDITOR</h2>
+<h2>Scrie răspunsurile</h2>
 
 <input id="A" placeholder="A"><br>
 <input id="B" placeholder="B"><br>
 <input id="C" placeholder="C"><br>
-<input id="D" placeholder="D"><br>
+<input id="D" placeholder="D"><br><br>
 
 <select id="correct">
-<option>A</option>
-<option>B</option>
-<option>C</option>
-<option>D</option>
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="D">D</option>
 </select>
 
-<br>
+<br><br>
 
-<button onclick="sendAnswers()">
-Trimite răspunsuri
-</button>
+<button onclick="send()">Trimite</button>
 
 <script>
 
 const supabase = window.supabase.createClient(
 "https://tqsvemcagstrdlqagesz.supabase.co",
-
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q"
 )
 
-async function sendAnswers(){
+async function send(){
 
 let A=document.getElementById("A").value
 let B=document.getElementById("B").value
@@ -71,7 +43,7 @@ let D=document.getElementById("D").value
 let correct=document.getElementById("correct").value
 
 await supabase
-.from("game")
+.from("question")
 .update({
 A:A,
 B:B,
@@ -81,7 +53,7 @@ correct:correct
 })
 .eq("id",1)
 
-alert("Răspunsurile au fost salvate")
+alert("Salvat")
 
 }
 

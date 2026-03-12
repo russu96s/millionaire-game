@@ -3,7 +3,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
@@ -34,18 +33,11 @@ gap:20px;
 }
 
 .answer{
-
 padding:20px;
 border-radius:40px;
 border:2px solid white;
 background:orange;
 cursor:pointer;
-transition:0.3s;
-
-}
-
-.answer:hover{
-transform:scale(1.05);
 }
 
 .correct{
@@ -79,7 +71,6 @@ background:red;
 
 const supabase = window.supabase.createClient(
 "https://tqsvemcagstrdlqagesz.supabase.co",
-
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q"
 )
 
@@ -88,40 +79,37 @@ let correct=""
 async function load(){
 
 let {data}=await supabase
-.from("game")
+.from("question")
 .select("*")
-.limit(1)
+.eq("id",1)
+.single()
 
-let g=data[0]
+document.getElementById("question").innerText=data.question
 
-document.getElementById("question").innerText=g.question
+document.getElementById("A").innerText="A: "+data.A
+document.getElementById("B").innerText="B: "+data.B
+document.getElementById("C").innerText="C: "+data.C
+document.getElementById("D").innerText="D: "+data.D
 
-document.getElementById("A").innerText="A: "+g.A
-document.getElementById("B").innerText="B: "+g.B
-document.getElementById("C").innerText="C: "+g.C
-document.getElementById("D").innerText="D: "+g.D
-
-correct=g.correct
+correct=data.correct
 
 }
 
 function choose(a){
 
-let el=document.getElementById(a)
-
 if(a==correct){
 
-el.classList.add("correct")
+document.getElementById(a).classList.add("correct")
 
 }else{
 
-el.classList.add("wrong")
+document.getElementById(a).classList.add("wrong")
 
 }
 
 }
 
-setInterval(load,1000)
+setInterval(load,2000)
 
 </script>
 
