@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<title>Millionaire Game</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background: radial-gradient(circle,#6d2cff,#1a0033);
+color:white;
+text-align:center;
+}
+
+.container{
+width:80%;
+margin:auto;
+}
+
+.question{
+margin-top:40px;
+font-size:24px;
+border:2px solid white;
+padding:20px;
+border-radius:40px;
+}
+
+.answers{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+margin-top:40px;
+}
+
+.answer{
+padding:20px;
+border:2px solid white;
+border-radius:40px;
+cursor:pointer;
+}
+
+.answer:hover{
+background:#8e3cff;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Millionaire Game</h1>
+
+<div class="container">
+
+<input id="questionInput" placeholder="Scrie întrebarea">
+
+<button onclick="sendQuestion()">
+Trimite întrebare
+</button>
+
+<br><br>
+
+<input id="Ainput" placeholder="A">
+<input id="Binput" placeholder="B">
+<input id="Cinput" placeholder="C">
+<input id="Dinput" placeholder="D">
+
+<br>
+
+<select id="correctInput">
+<option>A</option>
+<option>B</option>
+<option>C</option>
+<option>D</option>
+</select>
+
+<button onclick="sendAnswers()">
+Trimite răspunsuri
+</button>
+
+<div class="question" id="question"></div>
+
+<div class="answers">
+
+<div class="answer" onclick="choose('A')" id="A"></div>
+<div class="answer" onclick="choose('B')" id="B"></div>
+<div class="answer" onclick="choose('C')" id="C"></div>
+<div class="answer" onclick="choose('D')" id="D"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const supabase = supabase.createClient(
+"SUPABASE_URL",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q"
+)
+
+let correct=""
+
+async function load(){
+
+let {data}=await supabase
+.from("game")
+.select("*")
+.limit(1)
+
+let g=data[0]
+
+document.getElementById("question").innerText=g.question
+
+document.getElementById("A").innerText="A: "+g.A
+document.getElementById("B").innerText="B: "+g.B
+document.getElementById("C").innerText="C: "+g.C
+document.getElementById("D").innerText="D: "+g.D
+
+correct=g.correct
+
+}
+
+async function sendQuestion(){
+
+let q=document.getElementById("questionInput").value
+
+await supabase
+.from("game")
+.update({question:q})
+.eq("id",1)
+
+load()
+
+}
+
+async function sendAnswers(){
+
+let A=document.getElementById("Ainput").value
+let B=document.getElementById("Binput").value
+let C=document.getElementById("Cinput").value
+let D=document.getElementById("Dinput").value
+let cor=document.getElementById("correctInput").value
+
+await supabase
+.from("game")
+.update({
+A:A,
+B:B,
+C:C,
+D:D,
+correct:cor
+})
+.eq("id",1)
+
+load()
+
+}
+
+function choose(a){
+
+if(a==correct){
+
+alert("✔ Corect!")
+
+}else{
+
+alert("✖ Greșit!")
+
+}
+
+}
+
+load()
+
+</script>
+
+</body>
+</html>
