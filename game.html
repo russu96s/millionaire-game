@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background: radial-gradient(circle,#6d2cff,#1a0033);
+color:white;
+text-align:center;
+}
+
+.question{
+margin:40px auto;
+width:70%;
+padding:20px;
+border:2px solid white;
+border-radius:40px;
+font-size:22px;
+}
+
+.answers{
+width:70%;
+margin:auto;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.answer{
+
+padding:20px;
+border-radius:40px;
+border:2px solid white;
+background:orange;
+cursor:pointer;
+transition:0.3s;
+
+}
+
+.answer:hover{
+transform:scale(1.05);
+}
+
+.correct{
+background:green;
+}
+
+.wrong{
+background:red;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Millionaire</h1>
+
+<div class="question" id="question"></div>
+
+<div class="answers">
+
+<div class="answer" onclick="choose('A')" id="A"></div>
+<div class="answer" onclick="choose('B')" id="B"></div>
+<div class="answer" onclick="choose('C')" id="C"></div>
+<div class="answer" onclick="choose('D')" id="D"></div>
+
+</div>
+
+<script>
+
+const supabase = window.supabase.createClient(
+"https://tqsvemcagstrdlqagesz.supabase.co",
+
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q"
+)
+
+let correct=""
+
+async function load(){
+
+let {data}=await supabase
+.from("game")
+.select("*")
+.limit(1)
+
+let g=data[0]
+
+document.getElementById("question").innerText=g.question
+
+document.getElementById("A").innerText="A: "+g.A
+document.getElementById("B").innerText="B: "+g.B
+document.getElementById("C").innerText="C: "+g.C
+document.getElementById("D").innerText="D: "+g.D
+
+correct=g.correct
+
+}
+
+function choose(a){
+
+let el=document.getElementById(a)
+
+if(a==correct){
+
+el.classList.add("correct")
+
+}else{
+
+el.classList.add("wrong")
+
+}
+
+}
+
+setInterval(load,1000)
+
+</script>
+
+</body>
+</html>

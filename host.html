@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+background:#1a0033;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+input{
+padding:10px;
+width:300px;
+}
+
+button{
+background:orange;
+border:none;
+padding:10px 20px;
+margin:10px;
+font-size:18px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>HOST - Scrie întrebarea</h2>
+
+<input id="question">
+
+<button onclick="sendQuestion()">
+Trimite întrebare
+</button>
+
+<script>
+
+const supabase = window.supabase.createClient(
+"https://tqsvemcagstrdlqagesz.supabase.co",
+
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q"
+)
+
+async function sendQuestion(){
+
+let q=document.getElementById("question").value
+
+await supabase
+.from("game")
+.update({question:q})
+.eq("id",1)
+
+alert("Întrebarea a fost trimisă")
+
+}
+
+</script>
+
+</body>
+</html>
