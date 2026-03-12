@@ -1,10 +1,9 @@
 {
   "name": "millionaire-game",
-  "version": "1.0.0",
-  "description": "Cine vrea să fie milionar - Web Game",
-  "type": "module",
+  "version": "0.0.4",
+  "description": "Cine vrea sa fie milionar",
   "scripts": {
-    "build": "echo 'No build required'"
+    "build": "echo 'Build OK'"
   },
   "dependencies": {}
 }
