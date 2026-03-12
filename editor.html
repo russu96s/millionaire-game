@@ -1,141 +1,88 @@
 <!DOCTYPE html>
-<html>
-v1.4
+<html lang="ro">
 <head>
-
-<meta charset="UTF-8">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-
-body{
-background:#1a0033;
-color:white;
-font-family:Arial;
-text-align:center;
-padding-top:40px;
-}
-
-input{
-padding:10px;
-margin:5px;
-width:320px;
-}
-
-select{
-padding:10px;
-margin:10px;
-}
-
-button{
-background:orange;
-border:none;
-padding:12px 25px;
-font-size:18px;
-cursor:pointer;
-}
-
-#status{
-margin-top:20px;
-font-size:18px;
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <title>Test Supabase Insert</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    input, textarea, select { display: block; margin: 10px 0; padding: 8px; width: 300px; }
+    button { padding: 10px 20px; background-color: orange; border: none; color: white; cursor: pointer; }
+    button:hover { background-color: darkorange; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
 </head>
-
 <body>
 
-<h2>Adaugă întrebare</h2>
+  <h1>Adaugă întrebări în Supabase</h1>
 
-<input id="question" placeholder="Întrebare"><br>
+  <form id="gameForm">
+    <label>Întrebare:</label>
+    <textarea id="question" required></textarea>
 
-<input id="A" placeholder="Răspuns A"><br>
-<input id="B" placeholder="Răspuns B"><br>
-<input id="C" placeholder="Răspuns C"><br>
-<input id="D" placeholder="Răspuns D"><br>
+    <label>Varianta A:</label>
+    <input type="text" id="A" required>
 
-<select id="correct">
-<option value="">Alege răspunsul corect</option>
-<option value="A">A</option>
-<option value="B">B</option>
-<option value="C">C</option>
-<option value="D">D</option>
-</select>
+    <label>Varianta B:</label>
+    <input type="text" id="B" required>
 
-<br>
+    <label>Varianta C:</label>
+    <input type="text" id="C" required>
 
-<button onclick="trimite()">Trimite</button>
+    <label>Varianta D:</label>
+    <input type="text" id="D" required>
 
-<div id="status"></div>
+    <label>Răspuns corect (A/B/C/D):</label>
+    <select id="correct" required>
+      <option value="">Selectează</option>
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="C">C</option>
+      <option value="D">D</option>
+    </select>
 
-<script>
+    <button type="submit">Trimite</button>
+  </form>
 
-const SUPABASE_URL = "https://tqsvemcagstrdlqagesz.supabase.co"
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzMzNDA3MSwiZXhwIjoyMDg4OTEwMDcxfQ.shuPDNYZW39rLupiwsGZx-Egxrsdie9b4K6USJUP_iE"
+  <p id="status"></p>
 
-const supabase = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)
+  <script>
+    // Initialize Supabase client
+    const supabaseUrl = 'https://tqsvemcagstrdlqagesz.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q';
+    const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 
-async function trimite(){
+    const form = document.getElementById('gameForm');
+    const status = document.getElementById('status');
 
-let status=document.getElementById("status")
-status.innerText="Se trimite..."
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-let question=document.getElementById("question").value
-let A=document.getElementById("A").value
-let B=document.getElementById("B").value
-let C=document.getElementById("C").value
-let D=document.getElementById("D").value
-let correct=document.getElementById("correct").value
+      const question = document.getElementById('question').value;
+      const A = document.getElementById('A').value;
+      const B = document.getElementById('B').value;
+      const C = document.getElementById('C').value;
+      const D = document.getElementById('D').value;
+      const correct = document.getElementById('correct').value;
 
-if(!question || !A || !B || !C || !D || !correct){
+      // Insert data into Supabase
+      const { data, error } = await supabase
+        .from('game')
+        .insert([
+          { question, A, B, C, D, correct }
+        ]);
 
-status.innerText="Completează toate câmpurile"
-return
-
-}
-
-try{
-
-let {error}=await supabase
-.from("question")
-.insert([
-{
-question:question,
-A:A,
-B:B,
-C:C,
-D:D,
-correct:correct
-}
-])
-
-if(error){
-
-console.log(error)
-status.innerText="ceva nu a mers"
-
-}else{
-
-status.innerText="Răspunsurile au fost salvate"
-
-}
-
-}catch(e){
-
-console.log(e)
-status.innerText="ceva nu a mers"
-
-}
-
-}
-
-</script>
+      if (error) {
+        status.textContent = 'Eroare: ' + error.message;
+        status.className = 'error';
+      } else {
+        status.textContent = 'Întrebare adăugată cu succes!';
+        status.className = 'success';
+        form.reset();
+      }
+    });
+  </script>
 
 </body>
-
 </html>
-
-
-
