@@ -1,0 +1,16 @@
+{
+  "name": "millionaire-game",
+  "version": "1.0.0",
+  "description": "Cine vrea să fie milionar - Web Game",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@supabase/supabase-js": "^2.38.4",
+    "cors": "^2.8.5"
+  }
+}
