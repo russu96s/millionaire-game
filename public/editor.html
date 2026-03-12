@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adaugă Întrebare - Cine vrea să fie milionar</title>
+    <title>Adaugă Întrebare - Cine vrea să fie milionar [v0.0.3]</title>
     <style>
         * {
             margin: 0;
@@ -170,6 +170,17 @@
             background: rgba(255, 215, 0, 0.3);
         }
 
+        .version {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            color: #888;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -236,7 +247,12 @@
         <button class="back-button" onclick="window.location.href='index.html'">← Înapoi la Meniu</button>
     </div>
 
+    <div class="version">v0.0.3</div>
+
     <script>
+        const VERSION = '0.0.3';
+        console.log(`%c[v${VERSION}] Editor loaded`, 'color: #ffd700; font-weight: bold');
+
         const form = document.getElementById('questionForm');
         const messageDiv = document.getElementById('message');
 
@@ -244,6 +260,7 @@
 
         async function handleSubmit(e) {
             e.preventDefault();
+            console.log(`[v${VERSION}] Form submitted`);
 
             // Validare
             const question = document.getElementById('question').value.trim();
@@ -253,7 +270,17 @@
             const answerD = document.getElementById('answerD').value.trim();
             const correctAnswer = document.getElementById('correctAnswer').value.trim();
 
+            console.log(`[v${VERSION}] Form data:`, {
+                question: question.substring(0, 30) + '...',
+                A: answerA.substring(0, 20) + '...',
+                B: answerB.substring(0, 20) + '...',
+                C: answerC.substring(0, 20) + '...',
+                D: answerD.substring(0, 20) + '...',
+                correct: correctAnswer
+            });
+
             if (!question || !answerA || !answerB || !answerC || !answerD || !correctAnswer) {
+                console.error(`[v${VERSION}] Missing fields`);
                 showMessage('Completează toate câmpurile!', 'error');
                 return;
             }
@@ -262,6 +289,8 @@
                 const apiUrl = window.location.hostname === 'localhost' 
                     ? 'http://localhost:3000/api/questions' 
                     : '/api/questions';
+
+                console.log(`[v${VERSION}] Sending to API:`, apiUrl);
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -279,9 +308,11 @@
                 });
 
                 const result = await response.json();
+                console.log(`[v${VERSION}] Response status:`, response.status);
+                console.log(`[v${VERSION}] Response:`, result);
 
                 if (!response.ok) {
-                    console.error('Error:', result);
+                    console.error(`[v${VERSION}] Error:`, result);
                     showMessage(result.error || 'Ceva nu a mers!', 'error');
                     return;
                 }
@@ -294,7 +325,7 @@
                 }, 3000);
 
             } catch (err) {
-                console.error('Error:', err);
+                console.error(`[v${VERSION}] Error:`, err);
                 showMessage('Ceva nu a mers!', 'error');
             }
         }
@@ -305,7 +336,7 @@
             messageDiv.style.display = 'block';
         }
 
-        console.log('Editor.html încărcat cu succes');
+        console.log(`%c[v${VERSION}] Editor fully loaded`, 'color: #green; font-weight: bold');
     </script>
 </body>
 </html>

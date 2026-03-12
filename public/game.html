@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jocul - Cine vrea să fie milionar</title>
+    <title>Jocul - Cine vrea să fie milionar [v0.0.3]</title>
     <style>
         * {
             margin: 0;
@@ -198,6 +198,17 @@
             display: block;
         }
 
+        .version {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            color: #888;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -246,23 +257,31 @@
         </div>
     </div>
 
+    <div class="version">v0.0.3</div>
+
     <script>
+        const VERSION = '0.0.3';
+        console.log(`%c[v${VERSION}] Game loaded`, 'color: #ffd700; font-weight: bold');
+
         let currentQuestion = null;
         let answered = false;
         let lastUpdateTime = null;
         let updateInterval = null;
 
         async function loadQuestion() {
+            console.log(`[v${VERSION}] Loading question...`);
             try {
                 const apiUrl = window.location.hostname === 'localhost' 
                     ? 'http://localhost:3000/api/questions' 
                     : '/api/questions';
 
+                console.log(`[v${VERSION}] Fetching from:`, apiUrl);
                 const response = await fetch(apiUrl);
                 const result = await response.json();
+                console.log(`[v${VERSION}] Response:`, result);
 
                 if (!response.ok) {
-                    console.error('Error:', result);
+                    console.error(`[v${VERSION}] Error:`, result);
                     document.getElementById('gameContent').innerHTML = 
                         '<div class="loading">❌ Eroare la încărcarea datelor</div>';
                     return;
@@ -283,7 +302,7 @@
                 updateStatus();
 
             } catch (err) {
-                console.error('Error:', err);
+                console.error(`[v${VERSION}] Fetch error:`, err);
                 document.getElementById('gameContent').innerHTML = 
                     '<div class="loading">❌ Eroare la încărcarea datelor</div>';
             }
@@ -375,7 +394,7 @@
         loadQuestion();
         startAutoRefresh();
 
-        console.log('Game.html încărcat cu succes');
+        console.log(`%c[v${VERSION}] Game fully loaded`, 'color: #4caf50; font-weight: bold');
     </script>
 </body>
 </html>

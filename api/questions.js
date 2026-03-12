@@ -1,7 +1,11 @@
+const VERSION = '0.0.3';
 const SUPABASE_URL = 'https://tqsvemcagstrdlqagesz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q';
 
+console.log(`[v${VERSION}] API Serverless Function started`);
+
 async function handler(req, res) {
+  console.log(`[v${VERSION}] Request: ${req.method} ${req.url}`);
   // CORS Headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -44,12 +48,15 @@ async function handler(req, res) {
     if (req.method === 'POST') {
       // Add new question
       const { question, A, B, C, D, correct } = req.body;
+      console.log(`[v${VERSION}] POST Data received:`, { question: !!question, A: !!A, B: !!B, C: !!C, D: !!D, correct });
 
       if (!question || !A || !B || !C || !D || !correct) {
+        console.error(`[v${VERSION}] Missing fields in POST request`);
         return res.status(400).json({ error: 'Completează toate câmpurile' });
       }
 
       const url = `${SUPABASE_URL}/rest/v1/question`;
+      console.log(`[v${VERSION}] Sending to Supabase: ${url}`);
       
       const response = await fetch(url, {
         method: 'POST',
@@ -70,19 +77,20 @@ async function handler(req, res) {
       });
 
       if (!response.ok) {
-        console.error('Supabase Error:', response.status, response.statusText);
-        const error = await response.text();
-        console.error('Error details:', error);
-        return res.status(500).json({ error: 'Ceva nu a mers!' });
+        console.error(`[v${VERSION}] Supabase Error:`, response.status, response.statusText);
+        const errorText = await response.text();
+        console.error(`[v${VERSION}] Error details:`, errorText);
+        return res.status(500).json({ error: 'Ceva nu a mers! ' + errorText });
       }
 
       const data = await response.json();
+      console.log(`[v${VERSION}] Data saved successfully:`, data);
       return res.status(201).json({ success: true, data: data[0], message: 'Întrebare salvată cu succes!' });
     }
 
     res.status(405).json({ error: 'Method not allowed' });
   } catch (err) {
-    console.error('Server Error:', err);
+    console.error(`[v${VERSION}] Server Error:`, err);
     res.status(500).json({ error: 'Eroare pe server: ' + err.message });
   }
 }
