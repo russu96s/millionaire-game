@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="ro">
+  v1.0.1
 <head>
-
-
-  v1
   <meta charset="UTF-8">
   <title>Test Supabase Insert</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
@@ -18,75 +16,78 @@
 </head>
 <body>
 
-  <h1>Adaugă întrebări în Supabase</h1>
+<h1>Adaugă întrebări în Supabase</h1>
 
-  <form id="gameForm">
-    <label>Întrebare:</label>
-    <textarea id="question" required></textarea>
+<form id="gameForm">
+  <label>Întrebare:</label>
+  <textarea id="question" required></textarea>
 
-    <label>Varianta A:</label>
-    <input type="text" id="A" required>
+  <label>Varianta A:</label>
+  <input type="text" id="A" required>
 
-    <label>Varianta B:</label>
-    <input type="text" id="B" required>
+  <label>Varianta B:</label>
+  <input type="text" id="B" required>
 
-    <label>Varianta C:</label>
-    <input type="text" id="C" required>
+  <label>Varianta C:</label>
+  <input type="text" id="C" required>
 
-    <label>Varianta D:</label>
-    <input type="text" id="D" required>
+  <label>Varianta D:</label>
+  <input type="text" id="D" required>
 
-    <label>Răspuns corect (A/B/C/D):</label>
-    <select id="correct" required>
-      <option value="">Selectează</option>
-      <option value="A">A</option>
-      <option value="B">B</option>
-      <option value="C">C</option>
-      <option value="D">D</option>
-    </select>
+  <label>Răspuns corect (A/B/C/D):</label>
+  <select id="correct" required>
+    <option value="">Selectează</option>
+    <option value="A">A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+    <option value="D">D</option>
+  </select>
 
-    <button type="submit">Trimite</button>
-  </form>
+  <button type="submit">Trimite</button>
+</form>
 
-  <p id="status"></p>
+<p id="status"></p>
 
-  <script>
-    // Initialize Supabase client
-    const supabaseUrl = 'https://tqsvemcagstrdlqagesz.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q';
-    const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
+<script>
+  // Corect inițializare Supabase JS v2
+  const supabaseUrl = 'https://tqsvemcagstrdlqagesz.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q';
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    const form = document.getElementById('gameForm');
-    const status = document.getElementById('status');
+  const form = document.getElementById('gameForm');
+  const status = document.getElementById('status');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      const question = document.getElementById('question').value;
-      const A = document.getElementById('A').value;
-      const B = document.getElementById('B').value;
-      const C = document.getElementById('C').value;
-      const D = document.getElementById('D').value;
-      const correct = document.getElementById('correct').value;
+    // Preluare date
+    const question = document.getElementById('question').value;
+    const A = document.getElementById('A').value;
+    const B = document.getElementById('B').value;
+    const C = document.getElementById('C').value;
+    const D = document.getElementById('D').value;
+    const correct = document.getElementById('correct').value;
 
-      // Insert data into Supabase
+    status.textContent = 'Se trimite...';
+    status.className = '';
+
+    try {
       const { data, error } = await supabase
         .from('game')
-        .insert([
-          { question, A, B, C, D, correct }
-        ]);
+        .insert({ question, A, B, C, D, correct });
 
-      if (error) {
-        status.textContent = 'Eroare: ' + error.message;
-        status.className = 'error';
-      } else {
-        status.textContent = 'Întrebare adăugată cu succes!';
-        status.className = 'success';
-        form.reset();
-      }
-    });
-  </script>
+      if (error) throw error;
+
+      status.textContent = 'Întrebare adăugată cu succes!';
+      status.className = 'success';
+      form.reset(); // resetează doar după ce merge insert-ul
+    } catch (err) {
+      status.textContent = 'Eroare: ' + err.message;
+      status.className = 'error';
+      console.error(err);
+    }
+  });
+</script>
 
 </body>
 </html>
-
