@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -19,9 +20,7 @@ padding-top:40px;
 input{
 padding:10px;
 margin:5px;
-width:300px;
-border-radius:6px;
-border:none;
+width:320px;
 }
 
 select{
@@ -35,24 +34,11 @@ border:none;
 padding:12px 25px;
 font-size:18px;
 cursor:pointer;
-border-radius:8px;
-}
-
-button:hover{
-opacity:0.9;
 }
 
 #status{
 margin-top:20px;
 font-size:18px;
-}
-
-.success{
-color:#00ff88;
-}
-
-.error{
-color:#ff4444;
 }
 
 </style>
@@ -71,7 +57,7 @@ color:#ff4444;
 <input id="D" placeholder="Răspuns D"><br>
 
 <select id="correct">
-<option value="">Răspuns corect</option>
+<option value="">Alege răspunsul corect</option>
 <option value="A">A</option>
 <option value="B">B</option>
 <option value="C">C</option>
@@ -86,27 +72,26 @@ color:#ff4444;
 
 <script>
 
-const supabase = window.supabase.createClient(
-"https://tqsvemcagstrdlqagesz.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q"
-)
+const SUPABASE_URL = "https://tqsvemcagstrdlqagesz.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxc3ZlbWNhZ3N0cmRscWFnZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzQwNzEsImV4cCI6MjA4ODkxMDA3MX0.o_cGQGxqx3GWfGASReM0PkiuFGRiLtf3uhlmAuxdd9Q"
+
+const supabase = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)
 
 async function trimite(){
 
-let question=document.getElementById("question").value.trim()
-let A=document.getElementById("A").value.trim()
-let B=document.getElementById("B").value.trim()
-let C=document.getElementById("C").value.trim()
-let D=document.getElementById("D").value.trim()
-let correct=document.getElementById("correct").value
-
 let status=document.getElementById("status")
+status.innerText="Se trimite..."
 
-status.innerHTML="Se trimite..."
+let question=document.getElementById("question").value
+let A=document.getElementById("A").value
+let B=document.getElementById("B").value
+let C=document.getElementById("C").value
+let D=document.getElementById("D").value
+let correct=document.getElementById("correct").value
 
 if(!question || !A || !B || !C || !D || !correct){
 
-status.innerHTML='<span class="error">Completează toate câmpurile</span>'
+status.innerText="Completează toate câmpurile"
 return
 
 }
@@ -128,26 +113,19 @@ correct:correct
 
 if(error){
 
-status.innerHTML='<span class="error">ceva nu a mers</span>'
-console.error(error)
+console.log(error)
+status.innerText="ceva nu a mers"
 
 }else{
 
-status.innerHTML='<span class="success">Răspunsurile au fost salvate cu succes</span>'
-
-document.getElementById("question").value=""
-document.getElementById("A").value=""
-document.getElementById("B").value=""
-document.getElementById("C").value=""
-document.getElementById("D").value=""
-document.getElementById("correct").value=""
+status.innerText="Răspunsurile au fost salvate"
 
 }
 
 }catch(e){
 
-status.innerHTML='<span class="error">ceva nu a mers</span>'
-console.error(e)
+console.log(e)
+status.innerText="ceva nu a mers"
 
 }
 
@@ -156,4 +134,5 @@ console.error(e)
 </script>
 
 </body>
+
 </html>
