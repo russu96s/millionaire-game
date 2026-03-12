@@ -1,6 +1,6 @@
 {
   "name": "millionaire-game",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Cine vrea sa fie milionar",
   "scripts": {
     "build": "echo 'Build OK'"
