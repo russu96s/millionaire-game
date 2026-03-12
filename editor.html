@@ -42,7 +42,7 @@ let C=document.getElementById("C").value
 let D=document.getElementById("D").value
 let correct=document.getElementById("correct").value
 
-await supabase
+let {data,error}=await supabase
 .from("question")
 .update({
 A:A,
@@ -53,11 +53,19 @@ correct:correct
 })
 .eq("id",1)
 
+if(error){
+
+alert("Eroare: "+error.message)
+
+}else{
+
 alert("Salvat")
 
 }
 
+}
 </script>
 
 </body>
+
 </html>
