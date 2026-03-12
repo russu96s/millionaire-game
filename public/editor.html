@@ -259,7 +259,11 @@
             }
 
             try {
-                const response = await fetch('/api/questions', {
+                const apiUrl = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:3000/api/questions' 
+                    : '/api/questions';
+
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

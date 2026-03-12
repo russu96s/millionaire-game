@@ -254,7 +254,11 @@
 
         async function loadQuestion() {
             try {
-                const response = await fetch('/api/questions/latest');
+                const apiUrl = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:3000/api/questions' 
+                    : '/api/questions';
+
+                const response = await fetch(apiUrl);
                 const result = await response.json();
 
                 if (!response.ok) {
